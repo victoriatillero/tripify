@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tripify Profile</title>
+</head>
+<body>
+    <header>
+        <%- include('../partials/_nav-bar.ejs') %>
+        <h1>Hi, <%= user.name %> /h1>
+    </header>
+    <main>
+       <h2> Upcoming itineraries </h2>
+       <%- include('../partials/_itineraryForm.ejs') %>
+       <h3> Account Settings</h3>
+    </main>
+
+    <footer>
+        <p> &copy; 2025 Tripify. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

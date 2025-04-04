@@ -1,0 +1,22 @@
+<h2> Create new itinerary</h2>
+<form action="/itineraries" method="POST">
+    <div>
+        <label for="title">Itinerary Title</label>
+        <input type="text" name="title" id="title" required>
+    </div>
+    <div>
+        <label for="budget">Budget</label>
+        <input type="number" name="budget" id="budget">
+    </div>
+    <div>
+        <label for="duration">Duration (days)</label>
+        <input type="number" name="duration" id="duration" required>
+    </div>
+    <div>
+        <select name="privacy" required>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+        </select>
+    </div>
+    <button type="submit">Create Itinerary</button>
+</form>

@@ -1,10 +1,18 @@
+// const express= require('express');
 const Itinerary = require('../models/itinerary.js')
 
+function capitalizeTitle(title){
+    return title
+    .split(' ') //
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 const createItinerary= async (req,res) => {
     try {
+        console.log("User ID from session:", req.session.userId) //debugging
         const { title, duration, budget, privacy} = req.body;
         const newItinerary = new Itinerary({
-            title,
+            title: capitalizeTitle(req.body.title),
             duration,
             budget,
             privacy,
@@ -14,30 +22,33 @@ const createItinerary= async (req,res) => {
         res.redirect(`/itineraries/${newItinerary._id}`);
     } catch (err) {
         console.log(err);
-        res.status(500).send('Server Error');
+        res.status(500).send('First Server Error');
     }
 };
 
-const viewItineraries = async (req,res) => {
+const viewItineraries = async (req, res) => {
+    console.log("User ID from session:", req.session.userId);
     try {
-        const itineraries = await Itinerary.find({createdBy: req.session.userId});
-        res.render('itineraries/index', {itineraries});
-    }catch (err){
-        console.log(err);
-        reset.status(500).send('Server error');
+        const itineraries = await Itinerary.find({ createdBy: req.session.userId });
+        console.log("Itineraries found:", itineraries);
+        res.render('index.ejs', { itineraries });
+    } catch (err) {
+        console.log("Error in viewItineraries:", err);
+        res.status(500).send('Server error here');
     }
-}
+};
+
 
 const viewItinerary = async (req,res) => {
     try {
-        const itinerary = await Itinerary.findById(req.params.id).populate('days');
+        const itinerary = await Itinerary.findById(req.params.id)
         if (!itinerary) {
             return res.status(404).send('Itinerary not found');
         }
-        res.render('itineraries/show', {itinerary});
+        res.render('itineraries/details.ejs', {itinerary});
     } catch (err) {
         console.log(err);
-        res.status(500).send('Server Error');
+        res.status(500).send("Here's the Server Error");
     }
 };
 
@@ -50,14 +61,15 @@ const editItineraryForm = async (req,res) => {
         res.render('itineraries/edit', {itinerary});
     } catch (err) {
         console.log(err);
-        res.status(500).send('Server error')
+        res.status(500).send('Here Ye: Server error')
     }
 };
 
 const updateItinerary = async (req,res) => {
     try {
         const { title, duration, budget, privacy} = req.body;
-        const updateItinerary = await Itinerary.findByIdAndUpdate(req.params.id,
+        const updatedItinerary = await Itinerary.findByIdAndUpdate(
+            req.params.id,
             {title, duration, budget, privacy},
             {new: true }
         );
@@ -67,7 +79,7 @@ const updateItinerary = async (req,res) => {
         res.redirect(`/itineraries/${updatedItinerary._id}`);
     } catch (err) {
         console.log(err);
-        res.status(500).send('Server Error');
+        res.status(500).send('Yay! Server Error');
     }
 };
 
@@ -80,7 +92,7 @@ const deleteItinerary = async (req,res) => {
         res.redirect('/itineraries');
     } catch (err) {
         console.log(err);
-        res.status(500).send('Server Error')
+        res.status(500).send('Last Server Error')
     }
 }
 

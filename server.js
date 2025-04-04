@@ -1,50 +1,72 @@
-// load environment variables from .env
+const express= require('express');
+const session= require('express-session');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const methodOverride= require('method-override');
+const authRoute =require('./routes/authRoute.js');
+const itinRoute = require('./routes/itinRoute.js');
+const profileRoute =require('./routes/profileRoute.js')
+const isSignedIn =require('./middleware/is-signed-in.js');
+const passUserToViews= require('./middleware/pass-user-to-views.js')
+const User = require('./models/user.js');
+const path = require('path');
+
+
+
 dotenv.config();
 
-// import downloaded dependency modules
-const express= require('express'); // Web Framework
-const mongoose = require('mongoose'); // MongoDB Object Document Modelling
-const methodOverride= require('method-override'); // enables PUT & DELETE requests via forms
-const session= require('express-session'); // handles user sessions
-//define the port
-const port = process.env.PORT ? process.env.PORT : '3000'; // sets the port in .env file
+const app = express();
+app.set('views', path.join(__dirname, 'views'));
 
-const authRoute =require('./routes/authRoute.js')
-const itineraryRoute = require('./routes/itineraryRoute.js')
-const app = express(); // create express application
+const port = process.env.PORT ? process.env.PORT : '3000';
 
-
-app.get('/', (req,res)=>{
-    res.send("Connected to Tripify");
-})
-
-//middleware
-app.use(express.urlencoded({extended:true})); // parse incoming data
-app.use(methodOverride('_method')); // support HTTP verbs like PUT & DELETE in forms
-
-
-// session set up (keeps users logged in across diff pages)
+app.use(express.urlencoded({extended:true}));
+app.use(methodOverride('_method'));
 app.use(
     session({
-        secret:process.env.SESSION_SECRET, // used to sign session cookies
-        resave:false, // prevents saving data unless modified
-        saveUninitialized:true, // ensures uninitialized sessions are saved
+        secret:process.env.SESSION_SECRET,
+        resave:false,
+        saveUninitialized:true,
+        cookie: {
+            httpOnly:true,
+            secure: process.env.NODE_ENV === 'production'
+        }
     })
 );
-app.use('/', authRoute)
-app.use('/itineraries', itineraryRoute)
-// connect to mongoDB
-mongoose.connect(process.env.MONGODB_URI);
 
+app.use('/', authRoute);
+app.use(passUserToViews);
+app.use('/itineraries', isSignedIn);
+app.use('/profile', profileRoute);
+
+app.use(itinRoute);
+
+
+app.get('/home', async (req, res) => {
+    console.log("Session data:", req.session);  // Log session
+    if (!req.session || !req.session.userId) {
+        console.log("No active session found")
+        return res.redirect('/login');
+    }
+    try {
+        const user= await User.findById(req.session.userId);
+        if (!user) {
+            console.log("User not found")
+            return res.redirect('/login');
+        }
+        console.log("User Found:", user);
+        res.render('navigations/home.ejs', { user });
+    }catch (err) {
+        console.error('Error fetching user:,', err)
+        res.redirect('/login');
+    }
+});
+
+mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('connected', () => {
   console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
 });
 
-// routes
-app.get('/', (req, res) => {
-    res.send("Tripify is live!")
-})
 
 app.listen(port, () => {
     console.log(`The express app is ready on port ${port}!`)

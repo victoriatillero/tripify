@@ -10,7 +10,10 @@ const itinerarySchema = new Schema({
         type: Number,
         required: true,
     },
-    budget: Number,
+    budget: {
+        type: Number,
+        default: 0,
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
@@ -22,7 +25,7 @@ const itinerarySchema = new Schema({
         enum:['public', 'private',]
     },
     days: [{
-        title: String,
+        type: String,
         activities: [ {
             name: String,
             time: String,
