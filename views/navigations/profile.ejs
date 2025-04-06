@@ -8,12 +8,27 @@
 <body>
     <header>
         <%- include('../partials/_nav-bar.ejs') %>
-        <h1>Hi, <%= user.name %> /h1>
+        <h1>Hi, <%= user.username %> </h1>
     </header>
     <main>
-       <h2> Upcoming itineraries </h2>
+        <h2>Upcoming Itineraries</h2>
+        <% if (user.itineraries.length > 0) { %>
+            <ul>
+                <% user.itineraries.forEach(function(itineraryId) { %>
+                    <li>
+                        <a href="/itineraries/<%= itineraryId %>">
+                            <% /* Fetch itinerary details like title here */ %>
+                            <%= itineraryId %> <!-- You can display the title or other details here -->
+                        </a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No upcoming itineraries</p>
+        <% } %>
+        
        <%- include('../partials/_itineraryForm.ejs') %>
-       <h3> Account Settings</h3>
+       <h3><a href="/profile/edit"> Edit Profile Settings</a> </h3>
     </main>
 
     <footer>

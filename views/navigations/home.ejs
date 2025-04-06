@@ -3,21 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tripify Home</title>
+    <title>Tripify | Home </title>
 </head>
 <body>
     <header>
         <%- include('../partials/_nav-bar.ejs') %>
-        <h1>Welcome back, <%= user.username %>!</h1>
+        <% if (user) { %>
+            <h1>Welcome back, <%= user.username %>!</h1>
+        <% } else { %>
+            <h1>Welcome to Tripify!</h1>
+        <% } %>
     </header>
+
     <main>
-       <h2> Start planning your next adventure! </h2>
-       <%- include('../partials/_itineraryForm.ejs') %>
+       <h2>Start planning your next adventure!</h2>
+
+       <% if (user) { %>
+           <%- include('../partials/_itineraryForm.ejs') %>
+       <% } else { %>
+           <p> Browse popular itineraries or <a href="/auth/login">log in</a> to start creating itineraries!</p>
+       <% } %>
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
+       <br>
     </main>
 
     <footer>
-        <p> &copy; 2025 Tripify. All rights reserved.</p>
+        <p>&copy; 2025 Tripify. All rights reserved.</p>
     </footer>
-
 </body>
 </html>
