@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tripify | Home </title>
-</head>
-<body>
+<% var title = 'Home || Tripify' %>
     <header>
-        <%- include('../partials/_nav-bar.ejs') %>
         <% if (user) { %>
             <h1>Welcome back, <%= user.username %>!</h1>
         <% } else { %>
@@ -23,19 +15,4 @@
        <% } else { %>
            <p> Browse popular itineraries or <a href="/auth/login">log in</a> to start creating itineraries!</p>
        <% } %>
-       <br>
-       <br>
-       <br>
-       <br>
-       <br>
-       <br>
-       <br>
-       <br>
-       <br>
     </main>
-
-    <footer>
-        <p>&copy; 2025 Tripify. All rights reserved.</p>
-    </footer>
-</body>
-</html>

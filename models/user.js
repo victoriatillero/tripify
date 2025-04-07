@@ -11,11 +11,15 @@ const userSchema= new Schema({
     username: {
         type:String,
         required:true,
-    }, 
+    },
     password: {
         type: String,
         required: true,
     },
+    itineraries: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Itinerary'
+    }]
 })
 
 userSchema.methods.comparePassword= async function(candidatePassword) {

@@ -1,0 +1,20 @@
+<% var title = 'Edit Activity || Tripify' %>
+<div class="activity-edit-container">
+  <h1>Edit Activity</h1>
+  <form action="/itineraries/<%= itineraryId %>/days/<%= dayNumber %>/activities/<%= activityIndex %>?_method=PUT" method="POST">
+    <label for="title">Title:</label>
+    <input type="text" name="title" value="<%= activity.title %>" required>
+
+    <label for="description">Description:</label>
+    <input type="text" name="description" value="<%= activity.description %>">
+
+    <label for="time">Time:</label>
+    <input type="text" name="time" value="<%= activity.time %>">
+
+    <label for="location">Location:</label>
+    <input type="text" name="location" value="<%= activity.location %>">
+
+    <button type="submit">Save Activity</button>
+  </form>
+</div>
+<a href="/itineraries/<%= itineraryId %>/edit">← Back to Itinerary</a>

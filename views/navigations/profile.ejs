@@ -1,39 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tripify Profile</title>
-</head>
-<body>
+<% var title = 'Your Profile || Tripify' %>
     <header>
-        <%- include('../partials/_nav-bar.ejs') %>
         <h1>Hi, <%= user.username %> </h1>
     </header>
     <main>
         <h2>Upcoming Itineraries</h2>
-        <% if (user.itineraries.length > 0) { %>
-            <ul>
-                <% user.itineraries.forEach(function(itineraryId) { %>
-                    <li>
-                        <a href="/itineraries/<%= itineraryId %>">
-                            <% /* Fetch itinerary details like title here */ %>
-                            <%= itineraryId %> <!-- You can display the title or other details here -->
-                        </a>
-                    </li>
-                <% }); %>
-            </ul>
+
+        <% if (itineraries.length === 0) { %>
+          <p>No upcoming trips planned yet.</p>
         <% } else { %>
-            <p>No upcoming itineraries</p>
+          <ul>
+            <% itineraries.forEach(itinerary => { %>
+              <li>
+                <a href="/itineraries/<%=itinerary._id%>">
+                    <strong><%= itinerary.title %></strong>
+                </a>
+                <% if (itinerary.coverPhoto) { %>
+                  <div>
+                    <img src="<%= itinerary.coverPhoto %>" alt="Trip Cover" style="width: 200px; height: auto;">
+                  </div>
+                <% } %>
+              </li>
+            <% }) %>
+          </ul>
         <% } %>
-        
+
+
        <%- include('../partials/_itineraryForm.ejs') %>
        <h3><a href="/profile/edit"> Edit Profile Settings</a> </h3>
-    </main>
-
-    <footer>
-        <p> &copy; 2025 Tripify. All rights reserved.</p>
-    </footer>
-
-</body>
-</html>
+    

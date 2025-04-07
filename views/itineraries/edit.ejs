@@ -1,0 +1,121 @@
+<% var title = 'Edit ' + itinerary.title + ' || Tripify'; %>
+  <form action="/itineraries/<%= itinerary._id %>?_method=PUT" method="POST">
+    <div>
+      <label for="title">Title:</label>
+      <input type="text" name="title" id="title" value="<%= itinerary.title %>" required>
+    </div>
+
+    <div>
+      <label for="budget">Budget:</label>
+      <input type="number" name="budget" id="budget" value="<%= itinerary.budget %>">
+    </div>
+
+    <div>
+      <label for="duration">Duration (days):</label>
+      <input type="number" name="duration" id="duration" value="<%= itinerary.duration %>" required>
+    </div>
+
+    <div>
+      <label for="privacy">Privacy:</label>
+      <select name="privacy" id="privacy">
+        <option value="public" <%= itinerary.privacy === 'public' ? 'selected' : '' %>>Public</option>
+        <option value="private" <%= itinerary.privacy === 'private' ? 'selected' : '' %>>Private</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="coverPhoto">Cover Photo URL:</label>
+      <input type="text" name="coverPhoto" id="coverPhoto" value="<%= itinerary.coverPhoto || '' %>">
+    </div>
+
+    <button type="submit">Save Changes</button>
+  </form>
+  <form action="/itineraries/<%= itinerary._id %>?_method=DELETE" method="POST" style="display: inline-block;">
+    <button type="submit" onclick="return confirm('Are you sure you want to delete this itinerary? This cannot be undone.')">Delete Itinerary </button>
+  </form>
+
+  <hr>
+
+  <h2>Edit Daily Activities</h2>
+
+  <% itinerary.days.forEach((day) => { %>
+    <div>
+      <h3>Day <%= day.dayNumber %></h3>
+
+      <% if (day.activities.length > 0) { %>
+        <ul>
+          <% day.activities.forEach((activity, activityIndex) => { %>
+            <% if (activity) { %>
+              <li>
+                <a href="#" onclick="openModal(<%= `${day.dayNumber}, ${activityIndex}` %>)">
+                  <strong>
+                    <%= typeof activity === 'string' ? activity : activity.title %>
+                  </strong>
+                </a>
+              </li>
+            <% } %>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>No activities yet</p>
+      <% } %>
+
+      <form action="/itineraries/<%= itinerary._id %>/add-activity" method="POST">
+        <input type="hidden" name="dayNumber" value="<%= day.dayNumber %>">
+
+        <label for="title">Title:</label>
+        <input type="text" name="title" required>
+
+        <label for="description">Description:</label>
+        <input type="text" name="description">
+
+        <label for="time">Time:</label>
+        <input type="text" name="time">
+
+        <label for="location">Location:</label>
+        <input type="text" name="location">
+
+        <button type="submit">Add Activity</button>
+      </form>
+    </div>
+    <hr>
+  <% }) %>
+
+  <!-- Modal -->
+  <div id="activityModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; padding:20px; border:1px solid #ccc; z-index:1000;">
+    <h2 id="modalTitle"></h2>
+    <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+    <p><strong>Time:</strong> <span id="modalTime"></span></p>
+    <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+    <div style="margin-top:10px;">
+      <a id="editLink" href="#">Edit</a> |
+      <form id="deleteForm" method="POST" style="display:inline;">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit" onclick="return confirm('Delete this activity?')">Delete</button>
+      </form>
+    </div>
+    <button onclick="closeModal()">Close</button>
+  </div>
+
+  <script>
+    const activities = <%- JSON.stringify(itinerary.days) %>;
+
+    function openModal(dayNum, actIdx) {
+      const day = activities.find(d => d.dayNumber === dayNum);
+      const activity = day.activities[actIdx];
+
+      document.getElementById('modalTitle').innerText = activity.title || activity;
+      document.getElementById('modalDescription').innerText = activity.description || 'N/A';
+      document.getElementById('modalTime').innerText = activity.time || 'N/A';
+      document.getElementById('modalLocation').innerText = activity.location || 'N/A';
+
+      document.getElementById('editLink').href = `/itineraries/<%= itinerary._id %>/days/${dayNum}/activities/${actIdx}/edit`;
+      document.getElementById('deleteForm').action = `/itineraries/<%= itinerary._id %>/days/${dayNum}/activities/${actIdx}?_method=DELETE`;
+
+      document.getElementById('activityModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('activityModal').style.display = 'none';
+    }
+  </script>

@@ -1,11 +1,12 @@
 <h2> Create new itinerary</h2>
-<form action="/itineraries" method="POST">
+<form id="create-itinerary-form" action="/itineraries" method="POST">
     <div>
         <label for="title">Itinerary Title</label>
         <input type="text" name="title" id="title" required>
     </div>
+
     <div>
-        <label for="budget">Budget</label>
+        <label for="budget">Budget:</label>
         <input type="number" name="budget" id="budget">
     </div>
     <div>
@@ -17,6 +18,10 @@
             <option value="public">Public</option>
             <option value="private">Private</option>
         </select>
+    </div>
+    <div>
+        <label for="coverPhoto">Cover Photo URL (optional)</label>
+        <input type="text" name="coverPhoto" id="coverPhoto">
     </div>
     <button type="submit">Create Itinerary</button>
 </form>

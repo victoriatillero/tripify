@@ -1,26 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Itineraries</title>
-    <%- include('../partials/_nav-bar.ejs') %>
-</head>
-<body>
-    <h1>Your Itineraries</h1>
+<% var title = 'Your Itineraries || Tripify' %>
 
-    <% if (itineraries.length === 0) { %>
-        <p>You have no itineraries yet. <a href="/itineraries/create">Create one now!</a></p>
-    <% } else { %>
-        <ul>
-            <% itineraries.forEach(itinerary => { %>
-                <li>
-                    <a href="/itineraries/<%= itinerary._id %>">
-                        <%= itinerary.title %>
-                    </a> - <%= itinerary.duration %> days
-                </li>
-            <% }) %>
-        </ul>
-    <% } %>
-</body>
-</html>
+<h1>All Itineraries</h1>
+
+<div class="itinerary-grid">
+  <% itineraries.forEach(itinerary => { %>
+    <div class="itinerary-card">
+      <% if (itinerary.coverPhoto) { %>
+        <img src="<%= itinerary.coverPhoto %>" alt="<%= itinerary.title %> Cover Photo" class="cover-img">
+      <% } else { %>
+        <div class="no-photo">No Photo</div>
+      <% } %>
+
+      <h2>
+        <a href="/itineraries/<%= itinerary._id %>">
+          <%= itinerary.title %>
+        </a>
+      </h2>
+    </div>
+  <% }) %>
+</div>
+
+<a href="/itineraries/new">Create a new Itinerary</a>

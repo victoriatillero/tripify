@@ -13,6 +13,7 @@ const itinerarySchema = new Schema({
     budget: {
         type: Number,
         default: 0,
+        min: 0
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,14 +25,22 @@ const itinerarySchema = new Schema({
         required: true,
         enum:['public', 'private',]
     },
-    days: [{
+    days: [
+        {
+            dayNumber: Number,
+            activities: [
+                {
+                    title: String,
+                    description: String,
+                    time: String,
+                    location: String
+        }
+    ]
+}],
+    coverPhoto: {
         type: String,
-        activities: [ {
-            name: String,
-            time: String,
-            description: String,
-        }]
-    }],
+        required: false,
+    }
 });
 const Itinerary = mongoose.model('Itinerary', itinerarySchema);
 module.exports = Itinerary
