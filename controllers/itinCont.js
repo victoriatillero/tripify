@@ -198,13 +198,15 @@ const deleteItinerary = async (req, res) => {
     const itineraryId = req.params.id;
 
     const deletedItinerary = await Itinerary.findByIdAndDelete(itineraryId);
-    if (!deletedItinerary) return res.status(404).send('Itinerary not found');
-
+    if (!deletedItinerary) {
+      return res.status(404).send('Itinerary not found');
+    }
+    const User=require('../models/user.js')
     await User.findByIdAndUpdate(
       req.session.userId,
       { $pull: { itineraries: itineraryId } }
     );
-
+    
     res.redirect('/profile');
   } catch (err) {
     res.status(500).send('Server error');
