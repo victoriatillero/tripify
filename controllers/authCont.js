@@ -21,7 +21,7 @@ const signUp = async (req, res) => {
         const { email, password, username } = req.body;
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.redirect('/auth/login'); // removed the message to front end saying "email already exists", add back iff necessary
+            return res.redirect('/auth/login');
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ email, password: hashedPassword, username });
@@ -37,7 +37,7 @@ const logIn = async (req, res) => {
         const { email, password } = req.body;
 
         const user = await User.findOne({ email });
-        if (!user) return res.redirect('/auth/login') // removed this: status(400).send(`No account found for ${req.body.email}. `)
+        if (!user) return res.redirect('/auth/login') 
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.redirect('/auth/login')
