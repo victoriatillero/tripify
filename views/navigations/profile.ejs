@@ -1,30 +1,38 @@
-<% var title = 'Your Profile || Tripify' %>
-    <header>
-        <h1>Hi, <%= user.username %> </h1>
-    </header>
-    <main>
-        <h2>Upcoming Itineraries</h2>
+<% var title='Your Profile || Tripify' %>
 
-        <% if (itineraries.length === 0) { %>
-          <p>No upcoming trips planned yet.</p>
-        <% } else { %>
-          <ul>
-            <% itineraries.forEach(itinerary => { %>
-              <li>
-                <a href="/itineraries/<%=itinerary._id%>">
-                    <strong><%= itinerary.title %></strong>
-                </a>
-                <% if (itinerary.coverPhoto) { %>
-                  <div>
-                    <img src="<%= itinerary.coverPhoto %>" alt="Trip Cover" style="width: 200px; height: auto;">
-                  </div>
+  <div class="profile-header">
+    <h1>Hi, <%= user.username %>
+    </h1>
+    <a href="/profile/edit" class="button edit-link">Edit Profile</a>
+  </div>
+
+  <main>
+    <h2>Upcoming Itineraries</h2>
+
+    <% if (itineraries.length===0) { %>
+      <p>No upcoming trips planned yet.</p>
+      <% } else { %>
+        <div class="card-container">
+          <% itineraries.forEach(itinerary=> { %>
+            <div class="itinerary-card">
+              <% if (itinerary.coverPhoto) { %>
+                <img src="<%= itinerary.coverPhoto %>" alt="<%= itinerary.title %> Cover">
                 <% } %>
-              </li>
+                  <div class="content">
+                    <h3><a href="/itineraries/<%= itinerary._id %>">
+                        <%= itinerary.title %>
+                      </a></h3>
+                    <p><strong>Duration:</strong>
+                      <%= itinerary.duration %> days
+                    </p>
+                    <p><strong>Budget:</strong> $<%= itinerary.budget %>
+                    </p>
+                  </div>
+            </div>
             <% }) %>
-          </ul>
+        </div>
         <% } %>
 
+          <%- include('../partials/_itineraryForm.ejs') %>
 
-       <%- include('../partials/_itineraryForm.ejs') %>
-       <h3><a href="/profile/edit"> Edit Profile Settings</a> </h3>
-    
+  </main>

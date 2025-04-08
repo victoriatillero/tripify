@@ -1,23 +1,22 @@
-<% var title = 'Your Itineraries || Tripify' %>
+<% var title='Your Itineraries || Tripify' %>
 
-<h1>All Itineraries</h1>
+    <h1>All Itineraries</h1>
 
-<div class="itinerary-grid">
-  <% itineraries.forEach(itinerary => { %>
-    <div class="itinerary-card">
-      <% if (itinerary.coverPhoto) { %>
-        <img src="<%= itinerary.coverPhoto %>" alt="<%= itinerary.title %> Cover Photo" class="cover-img">
-      <% } else { %>
-        <div class="no-photo">No Photo</div>
-      <% } %>
-
-      <h2>
-        <a href="/itineraries/<%= itinerary._id %>">
-          <%= itinerary.title %>
-        </a>
-      </h2>
+    <div class="itinerary-grid">
+        <% itineraries.forEach(itinerary=> { %>
+            <div class="itinerary-card">
+                <% if (itinerary.coverPhoto) { %>
+                    <img src="<%= itinerary.coverPhoto %>" alt="<%= itinerary.title %> Cover Photo" class="cover-img">
+                    <% } else { %>
+                        <div class="no-photo">No Photo</div>
+                        <% } %>
+                            <h2>
+                                <a href="/itineraries/<%= itinerary._id %>">
+                                    <%= itinerary.title %>
+                                </a>
+                            </h2>
+            </div>
+            <% }) %>
     </div>
-  <% }) %>
-</div>
 
-<a href="/itineraries/new">Create a new Itinerary</a>
+    <a href="/itineraries/new">Create a new Itinerary</a>

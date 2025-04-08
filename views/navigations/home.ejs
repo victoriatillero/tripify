@@ -1,18 +1,19 @@
-<% var title = 'Home || Tripify' %>
+<% var title='Home || Tripify' %>
     <header>
         <% if (user) { %>
             <h1>Welcome back, <%= user.username %>!</h1>
-        <% } else { %>
-            <h1>Welcome to Tripify!</h1>
-        <% } %>
+            <% } else { %>
+                <h1>Welcome to Tripify!</h1>
+                <% } %>
     </header>
 
     <main>
-       <h2>Start planning your next adventure!</h2>
+        <h2>Start planning your next adventure!</h2>
 
-       <% if (user) { %>
-           <%- include('../partials/_itineraryForm.ejs') %>
-       <% } else { %>
-           <p> Browse popular itineraries or <a href="/auth/login">log in</a> to start creating itineraries!</p>
-       <% } %>
+        <% if (user) { %>
+            <%- include('../partials/_itineraryForm.ejs') %>
+                <% } else { %>
+                    <p> Browse popular itineraries or <a href="/auth/login">log in</a> to start creating itineraries!
+                    </p>
+                    <% } %>
     </main>

@@ -57,55 +57,55 @@ const addActivityToDay = async (req, res) => {
   }
 };
 const editActivityForm = async (req, res) => {
-    const { id, dayNumber, activityIndex } = req.params;
+  const { id, dayNumber, activityIndex } = req.params;
 
-    try {
-      const itinerary = await Itinerary.findById(id);
-      if (!itinerary) return res.status(404).send("Itinerary not found");
+  try {
+    const itinerary = await Itinerary.findById(id);
+    if (!itinerary) return res.status(404).send("Itinerary not found");
 
-      const day = itinerary.days.find(d => d.dayNumber === parseInt(dayNumber));
-      if (!day) return res.status(404).send("Day not found");
+    const day = itinerary.days.find(d => d.dayNumber === parseInt(dayNumber));
+    if (!day) return res.status(404).send("Day not found");
 
-      const activity = day.activities[activityIndex];
-      if (!activity) return res.status(404).send("Activity not found");
+    const activity = day.activities[activityIndex];
+    if (!activity) return res.status(404).send("Activity not found");
 
-      res.render('itineraries/editActivity.ejs', {
-        itineraryId: id,
-        dayNumber,
-        activityIndex,
-        activity
-      });
-    } catch (err) {
-      res.status(500).send("Server error");
-    }
-  };
+    res.render('itineraries/editActivity.ejs', {
+      itineraryId: id,
+      dayNumber,
+      activityIndex,
+      activity
+    });
+  } catch (err) {
+    res.status(500).send("Server error");
+  }
+};
 
-  const updateActivity = async (req, res) => {
-    const { id, dayNumber, activityIndex } = req.params;
-    const { title, description, time, location } = req.body;
+const updateActivity = async (req, res) => {
+  const { id, dayNumber, activityIndex } = req.params;
+  const { title, description, time, location } = req.body;
 
-    try {
-      const itinerary = await Itinerary.findById(id);
-      if (!itinerary) return res.status(404).send("Itinerary not found");
+  try {
+    const itinerary = await Itinerary.findById(id);
+    if (!itinerary) return res.status(404).send("Itinerary not found");
 
-      const day = itinerary.days.find(d => d.dayNumber === parseInt(dayNumber));
-      if (!day) return res.status(404).send("Day not found");
+    const day = itinerary.days.find(d => d.dayNumber === parseInt(dayNumber));
+    if (!day) return res.status(404).send("Day not found");
 
-      const activity = day.activities[activityIndex];
-      if (!activity) return res.status(404).send("Activity not found");
+    const activity = day.activities[activityIndex];
+    if (!activity) return res.status(404).send("Activity not found");
 
-      activity.title = title;
-      activity.description = description;
-      activity.time = time;
-      activity.location = location;
+    activity.title = title;
+    activity.description = description;
+    activity.time = time;
+    activity.location = location;
 
-      await itinerary.save();
-      res.redirect(`/itineraries/${id}/edit`);
-    } catch (err) {
-      console.error("Error updating activity:", err);
-      res.status(500).send("Server error");
-    }
-  };
+    await itinerary.save();
+    res.redirect(`/itineraries/${id}/edit`);
+  } catch (err) {
+    console.error("Error updating activity:", err);
+    res.status(500).send("Server error");
+  }
+};
 
 const deleteActivity = async (req, res) => {
   const { id, dayNumber, activityIndex } = req.params;
@@ -162,55 +162,55 @@ const editItineraryForm = async (req, res) => {
 };
 
 const updateItinerary = async (req, res) => {
-    try {
-      const { title, duration, budget, privacy, coverPhoto } = req.body;
-      const itinerary = await Itinerary.findById(req.params.id);
+  try {
+    const { title, duration, budget, privacy, coverPhoto } = req.body;
+    const itinerary = await Itinerary.findById(req.params.id);
 
-      if (!itinerary) return res.status(404).send("Itinerary not found.");
+    if (!itinerary) return res.status(404).send("Itinerary not found.");
 
-      //update General Itinerary fields
-      itinerary.title = capitalizeTitle(title);
-      itinerary.duration = parseInt(duration);
-      itinerary.budget = budget;
-      itinerary.privacy = privacy;
-      itinerary.coverPhoto = coverPhoto || null;
+    //update General Itinerary fields
+    itinerary.title = capitalizeTitle(title);
+    itinerary.duration = parseInt(duration);
+    itinerary.budget = budget;
+    itinerary.privacy = privacy;
+    itinerary.coverPhoto = coverPhoto || null;
 
-      // Sync days if duration updated
-      const newDuration = parseInt(duration);
-      const currentDuration = itinerary.days.length;
+    // Sync days if duration updated
+    const newDuration = parseInt(duration);
+    const currentDuration = itinerary.days.length;
 
-      if (newDuration > currentDuration) {
-        for (let i = currentDuration + 1; i <= newDuration; i++) {
-          itinerary.days.push({ dayNumber: i, activities: [] });
-        }
-      } else if (newDuration < currentDuration) {
-        itinerary.days = itinerary.days.slice(0, newDuration);
+    if (newDuration > currentDuration) {
+      for (let i = currentDuration + 1; i <= newDuration; i++) {
+        itinerary.days.push({ dayNumber: i, activities: [] });
       }
-
-      await itinerary.save();
-      res.redirect(`/itineraries/${itinerary._id}`);
-    } catch (err) {
-      res.status(500).send("Server error");
+    } else if (newDuration < currentDuration) {
+      itinerary.days = itinerary.days.slice(0, newDuration);
     }
-  };
 
-  const deleteItinerary = async (req, res) => {
-    try {
-      const itineraryId = req.params.id;
+    await itinerary.save();
+    res.redirect(`/itineraries/${itinerary._id}`);
+  } catch (err) {
+    res.status(500).send("Server error");
+  }
+};
 
-      const deletedItinerary = await Itinerary.findByIdAndDelete(itineraryId);
-      if (!deletedItinerary) return res.status(404).send('Itinerary not found');
+const deleteItinerary = async (req, res) => {
+  try {
+    const itineraryId = req.params.id;
 
-      await User.findByIdAndUpdate(
-        req.session.userId,
-        { $pull: { itineraries: itineraryId } } // what in the heck is happening here?
-      );
+    const deletedItinerary = await Itinerary.findByIdAndDelete(itineraryId);
+    if (!deletedItinerary) return res.status(404).send('Itinerary not found');
 
-      res.redirect('/profile');
-    } catch (err) {
-      res.status(500).send('Server error');
-    }
-  };
+    await User.findByIdAndUpdate(
+      req.session.userId,
+      { $pull: { itineraries: itineraryId } } // what in the heck is happening here?
+    );
+
+    res.redirect('/profile');
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+};
 
 
 module.exports = {

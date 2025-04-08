@@ -1,76 +1,81 @@
-<% var title = itinerary.title + ' - Trip Details' %>
+<% var title=itinerary.title + ' - Trip Details' %>
 
-  <h1><%= itinerary.title %></h1>
+  <div class="trip-header">
+    <h1>
+      <%= itinerary.title %>
+    </h1>
+    <a href="/itineraries/<%= itinerary._id %>/edit" class="button small">Edit</a>
+  </div>
 
   <% if (itinerary.coverPhoto) { %>
     <div>
-      <img src="<%= itinerary.coverPhoto %>" alt="Trip Cover Photo" style="width:300px;">
+      <img src="<%= itinerary.coverPhoto %>" alt="Trip Cover Photo">
     </div>
-  <% } %>
+    <% } %>
 
-  <p><strong>Budget:</strong> $<%= itinerary.budget %></p>
-  <p><strong>Duration:</strong> <%= itinerary.duration %> days</p>
-  <p><strong>Privacy:</strong> <%= itinerary.privacy %></p>
 
-  <hr>
+      <p><strong>Budget:</strong> $<%= itinerary.budget %>
+      </p>
+      <p><strong>Duration:</strong>
+        <%= itinerary.duration %> days
+      </p>
+      <p><strong>Privacy:</strong>
+        <%= itinerary.privacy %>
+      </p>
 
-  <h2>Trip Plan</h2>
-  <% itinerary.days.forEach((day, index) => { %>
-    <div>
-      <h3>Day <%= day.dayNumber %></h3>
+      <hr>
 
-      <% if (day.activities.length > 0) { %>
-        <ul>
-          <% day.activities.forEach((activity, activityIndex) => { %>
-            <% if (activity) { %>
-              <li>
-                <% if (typeof activity === 'string') { %>
-                  <strong><%= activity %></strong>
-                <% } else { %>
-                  <strong>
+      <h2>Trip Plan</h2>
+
+      <% itinerary.days.forEach((day, index)=> { %>
+        <div class="day-section">
+          <h3>Day <%= day.dayNumber %>
+          </h3>
+
+          <% if (day.activities.length> 0) { %>
+            <div class="activity-list">
+              <% day.activities.forEach((activity, activityIndex)=> { %>
+                <% if (activity) { %>
+                  <div class="activity-item">
                     <a href="#" onclick="openModal(<%= day.dayNumber %>, <%= activityIndex %>)">
-                      <%= activity.title %>
+                      <strong>
+                        <%= typeof activity==='string' ? activity : activity.title %>
+                      </strong>
                     </a>
-                  </strong>
-                <% } %>
-              </li>
-            <% } %>
-          <% }) %>
-        </ul>
-      <% } else { %>
-        <p>No activities yet.</p>
-      <% } %>
-    </div>
+                  </div>
+                  <% } %>
+                    <% }) %>
+            </div>
+            <% } else { %>
+              <p>No activities yet.</p>
+              <% } %>
+        </div>
+        <% }) %>
 
-  <% }) %>
+          <div id="activityModal">
+            <h2 id="modalTitle"></h2>
+            <p><strong>Description:</strong> <span id="modalDescription"></span></p>
+            <p><strong>Time:</strong> <span id="modalTime"></span></p>
+            <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+            <button onclick="closeModal()" style="margin-top: 1rem;">Close</button>
+          </div>
 
-  <a href="/itineraries/<%= itinerary._id %>/edit"> Edit this Itinerary</a>
+          <script>
+            const activities = <% - JSON.stringify(itinerary.days) %>;
 
-  <!-- Modal -->
-  <div id="activityModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:white; padding:20px; border:1px solid #ccc; z-index:1000;">
-    <h2 id="modalTitle"></h2>
-    <p><strong>Description:</strong> <span id="modalDescription"></span></p>
-    <p><strong>Time:</strong> <span id="modalTime"></span></p>
-    <p><strong>Location:</strong> <span id="modalLocation"></span></p>
-    <button onclick="closeModal()">Close</button>
-  </div>
+            function openModal(dayNum, actIdx) {
+              const day = activities.find(d => d.dayNumber === dayNum);
+              const activity = day.activities[actIdx];
 
-  <script>
-    const activities = <%- JSON.stringify(itinerary.days) %>;
+              document.getElementById('modalTitle').innerText = activity.title || activity;
+              document.getElementById('modalDescription').innerText = activity.description || 'N/A';
+              document.getElementById('modalTime').innerText = activity.time || 'N/A';
+              document.getElementById('modalLocation').innerText = activity.location || 'N/A';
 
-    function openModal(dayNum, actIdx) {
-      const day = activities.find(d => d.dayNumber === dayNum);
-      const activity = day.activities[actIdx];
+              document.getElementById('activityModal').style.display = 'block';
+            }
 
-      document.getElementById('modalTitle').innerText = activity.title;
-      document.getElementById('modalDescription').innerText = activity.description || 'N/A';
-      document.getElementById('modalTime').innerText = activity.time || 'N/A';
-      document.getElementById('modalLocation').innerText = activity.location || 'N/A';
-
-      document.getElementById('activityModal').style.display = 'block';
-    }
-
-    function closeModal() {
-      document.getElementById('activityModal').style.display = 'none';
-    }
-  </script>
+            function closeModal() {
+              document.getElementById('activityModal').style.display = 'none';
+            }
+          </script>

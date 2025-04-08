@@ -17,13 +17,13 @@ const itinerarySchema = new Schema({
     },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User',
+        ref: 'User',
         required: true,
     },
     privacy: {
         type: String,
         required: true,
-        enum:['public', 'private',]
+        enum: ['public', 'private',]
     },
     days: [
         {
@@ -34,9 +34,9 @@ const itinerarySchema = new Schema({
                     description: String,
                     time: String,
                     location: String
-        }
-    ]
-}],
+                }
+            ]
+        }],
     coverPhoto: {
         type: String,
         required: false,

@@ -19,7 +19,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // View engine setup
-app.set('view engine', 'ejs'); 
+app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.set('layout', 'partials/_layout');
 app.use(expressLayouts);
@@ -30,13 +30,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-  },
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+    },
 }));
 
 app.use(passUserToViews);
@@ -50,10 +50,10 @@ app.use('/profile', isSignedIn, profileRoute);
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('connected', () => {
-  console.log(`Connected to MongoDB: ${mongoose.connection.name}`);
+    console.log(`Connected to MongoDB: ${mongoose.connection.name}`);
 });
 
 // Start server
 app.listen(port, () => {
-  console.log(`The express app is ready on port ${port}!`);
+    console.log(`The express app is ready on port ${port}!`);
 });

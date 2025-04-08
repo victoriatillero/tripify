@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
-    <title><%= typeof title !== 'undefined' ? title : 'Tripify' %></title>
+    <title>
+        <%= typeof title !=='undefined' ? title : 'Tripify' %>
+    </title>
 </head>
+
 <body>
     <%- include('./_nav-bar.ejs') %>
-    <main>
-        <%-body %>
-    </main>
+        <main>
+            <%-body %>
+        </main>
 
-    <footer>
-        <p>&copy; 2025 Tripify. All rights reserved.</p>
-    </footer>
+        <footer>
+            <p>&copy; 2025 Tripify. All rights reserved.</p>
+        </footer>
 </body>
+
 </html>
-
-
-Yes! So now that we've cleaned up the code, is it safe to restart the terminal and view the changes? i haven't 

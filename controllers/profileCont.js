@@ -1,5 +1,5 @@
 const User = require('../models/user.js')
-const bcrypt= require('bcrypt');
+const bcrypt = require('bcrypt');
 
 const profilePage = async (req, res) => {
     if (!req.session.userId) {
@@ -17,19 +17,19 @@ const profilePage = async (req, res) => {
         res.redirect('/home');
     }
 };
-const editUser = async (req, res)=> {
+const editUser = async (req, res) => {
     if (!req.session.userId) {
         return res.redirect('/login');
-  }
-  try {
-    const user = await User.findById(req.session.userId);
-    if (!user) {
-        return res.redirect('/login')
     }
-    res.render('navigations/editProfile.ejs', {user});
-  } catch (err) {
-    res.redirect('/login')
-  }
+    try {
+        const user = await User.findById(req.session.userId);
+        if (!user) {
+            return res.redirect('/login')
+        }
+        res.render('navigations/editProfile.ejs', { user });
+    } catch (err) {
+        res.redirect('/login')
+    }
 };
 
 const updateUser = async (req, res) => {
@@ -47,7 +47,7 @@ const updateUser = async (req, res) => {
         user.email = email;
 
         if (password) {
-            const hashed= await bcrypt.hash(password,10);
+            const hashed = await bcrypt.hash(password, 10);
             user.password = hashed;
         }
         await user.save();
@@ -60,7 +60,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         await User.findByIdAndDelete(req.session.userId);
-        req.session.destroy((err) =>{
+        req.session.destroy((err) => {
             if (err) {
                 return res.redirect('/profile')
             }
