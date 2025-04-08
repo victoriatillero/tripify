@@ -12,6 +12,8 @@ This project uses express-ejs-layouts to streamline page templating and maintain
 
 This project uses a custom modal popup to display activity details within an itinerary without navigating to a separate page. Clicking on an activity title dynamically opens a modal showing its title, description, time, and location. This improves the user experience by keeping interactions smooth and contextually focused. Resources used for implementing modals include <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog">MDN Web Docs</a> and <a href="https://www.w3schools.com/howto/howto_css_modals.asp"> W3Schools Modal Tutorial</a>.
 
+Link to <a href="https://trello.com/b/Rmx7s7YC/unit-2-project-planning">Trello planning board </a>
+
 # Technologies Used
 - **JavaScript**
 - **Node.js**
