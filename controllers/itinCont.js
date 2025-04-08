@@ -11,8 +11,7 @@ function capitalizeTitle(title) {
 const createItinerary = async (req, res) => {
   try {
     const duration = parseInt(req.body.duration);
-    const days = Array.from({ length: duration }, (_, i) => ({ //what in the flipper is this all about?
-      dayNumber: i + 1,
+    const days = Array.from({ length: duration }, (_, i) => ({
       activities: []
     }));
 
@@ -203,7 +202,7 @@ const deleteItinerary = async (req, res) => {
 
     await User.findByIdAndUpdate(
       req.session.userId,
-      { $pull: { itineraries: itineraryId } } // what in the heck is happening here?
+      { $pull: { itineraries: itineraryId } }
     );
 
     res.redirect('/profile');
@@ -211,7 +210,6 @@ const deleteItinerary = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
-
 
 module.exports = {
   createItinerary,

@@ -96,7 +96,7 @@
       </div>
 
       <script>
-        const activities = <% - JSON.stringify(itinerary.days) %>;
+        const activities = <%- JSON.stringify(itinerary.days) %>;
 
         function openModal(dayNum, actIdx) {
           const day = activities.find(d => d.dayNumber === dayNum);
