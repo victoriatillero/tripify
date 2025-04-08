@@ -12,7 +12,8 @@ const createItinerary = async (req, res) => {
   try {
     const duration = parseInt(req.body.duration);
     const days = Array.from({ length: duration }, (_, i) => ({
-      activities: []
+      dayNumber: i + 1,
+      activities: [],
     }));
 
     const newItinerary = await Itinerary.create({
@@ -206,7 +207,7 @@ const deleteItinerary = async (req, res) => {
       req.session.userId,
       { $pull: { itineraries: itineraryId } }
     );
-    
+
     res.redirect('/profile');
   } catch (err) {
     res.status(500).send('Server error');

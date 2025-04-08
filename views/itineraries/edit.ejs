@@ -23,6 +23,7 @@
       <div class="button-group">
         <button type="submit">Save Changes</button>
       </div>
+      <br>
       </form>
         <form action="/itineraries/<%= itinerary._id %>?_method=DELETE" method="POST" style="display:inline;">
           <button type="submit" class="button small"
@@ -37,8 +38,7 @@
 
   <% itinerary.days.forEach((day)=> { %>
     <div>
-      <h3>Day <%= day.dayNumber %>
-      </h3>
+      <h3>Day <%= day.dayNumber %></h3>
 
       <% if (day.activities.length> 0) { %>
         <div class="activity-list">
